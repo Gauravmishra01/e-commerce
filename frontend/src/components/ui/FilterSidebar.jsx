@@ -1,6 +1,7 @@
 import React from "react";
 import { Input } from "./input";
 import { Button } from "./button";
+import { Filter, RotateCcw, Search } from "lucide-react";
 
 const FilterSidebar = ({
   search,
@@ -49,97 +50,124 @@ const FilterSidebar = ({
   };
 
   return (
-    <div className="bg-gray-100 mt-10 p-4 rounded-md h-max hidden md:block w-64">
-      <Input
-        type="text"
-        placeholder="Search..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="bg-white p-2 rounded-md border-gray-400 border-2 w-full"
-      />
+    <aside className="sticky top-24 hidden h-max w-80 rounded-[1.75rem] border border-white/70 bg-white/85 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur md:block">
+      <div className="mb-5 flex items-center gap-3">
+        <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-white">
+          <Filter className="h-5 w-5" />
+        </span>
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-slate-500">
+            Smart filters
+          </p>
+          <h2 className="text-lg font-semibold text-slate-950">
+            Refine results
+          </h2>
+        </div>
+      </div>
 
-      <h1 className="mt-5 font-semibold text-xl">Category</h1>
-      <div className="flex flex-col gap-2 mt-3">
-        {UniqueCategory.map((item, index) => (
-          <div key={index} className="flex items-center gap-2">
-            <input
-              type="radio"
-              checked={category === item}
-              onChange={() => handleCategoryClick(item)}
-            />
-            <label>{item.toUpperCase()}</label>
+      <div className="space-y-5">
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <Input
+            type="text"
+            placeholder="Search products"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-11"
+          />
+        </div>
+
+        <section className="space-y-3">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-500">
+            Category
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {UniqueCategory.map((item, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => handleCategoryClick(item)}
+                className={`rounded-full border px-3 py-2 text-sm font-medium transition ${category === item ? "border-slate-950 bg-slate-950 text-white" : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"}`}
+              >
+                {item.toUpperCase()}
+              </button>
+            ))}
           </div>
-        ))}
+        </section>
+
+        <section className="space-y-3">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-500">
+            Brand
+          </h3>
+          <select
+            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-slate-400"
+            value={brand}
+            onChange={handleBrandChange}
+          >
+            {UniqueBrand.map((item, index) => (
+              <option key={index} value={item}>
+                {item.toUpperCase()}
+              </option>
+            ))}
+          </select>
+        </section>
+
+        <section className="space-y-3">
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-500">
+              Price Range
+            </h3>
+            <p className="text-sm font-medium text-slate-700">
+              ₹{priceRange[0]} - ₹{priceRange[1]}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <input
+              type="number"
+              min="0"
+              max="999999"
+              value={priceRange[0]}
+              onChange={handleMinChange}
+              className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none"
+            />
+            <input
+              type="number"
+              min="0"
+              max="999999"
+              value={priceRange[1]}
+              onChange={handleMaxChange}
+              className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm outline-none"
+            />
+          </div>
+
+          <input
+            type="range"
+            min="0"
+            max="999999"
+            step="100"
+            className="w-full accent-slate-950"
+            value={priceRange[0]}
+            onChange={handleMinChange}
+          />
+
+          <input
+            type="range"
+            min="0"
+            max="999999"
+            step="100"
+            className="w-full accent-slate-950"
+            value={priceRange[1]}
+            onChange={handleMaxChange}
+          />
+        </section>
+
+        <Button onClick={resetFilters} className="w-full">
+          <RotateCcw className="h-4 w-4" />
+          Reset filters
+        </Button>
       </div>
-
-      <h1 className="mt-5 font-semibold text-xl">Brand</h1>
-      <select
-        className="bg-white w-full p-2 border-gray-200 border-2 rounded-md"
-        value={brand}
-        onChange={handleBrandChange}
-      >
-        {UniqueBrand.map((item, index) => (
-          <option key={index} value={item}>
-            {item.toUpperCase()}
-          </option>
-        ))}
-      </select>
-
-      <h1 className="mt-5 font-semibold text-xl mb-3">Price Range</h1>
-
-      <label>
-        Price Range: ₹{priceRange[0]} - ₹{priceRange[1]}
-      </label>
-
-      <div className="flex gap-2 items-center mt-2">
-        <input
-          type="number"
-          min="0"
-          max="999999"
-          value={priceRange[0]}
-          onChange={handleMinChange}
-          className="w-24 p-1 border border-gray-300 rounded"
-        />
-        <span>-</span>
-        <input
-          type="number"
-          min="0"
-          max="999999"
-          value={priceRange[1]}
-          onChange={handleMaxChange}
-          className="w-24 p-1 border border-gray-300 rounded"
-        />
-      </div>
-
-      {/* ✅ Correct Range Sliders */}
-      <input
-        type="range"
-        min="0"
-        max="999999"
-        step="100"
-        className="w-full mt-2"
-        value={priceRange[0]}
-        onChange={handleMinChange}
-      />
-
-      <input
-        type="range"
-        min="0"
-        max="999999"
-        step="100"
-        className="w-full"
-        value={priceRange[1]}
-        onChange={handleMaxChange}
-      />
-
-      {/* ✅ Reset Button Fixed */}
-      <Button
-        onClick={resetFilters}
-        className="bg-red-600 text-white mt-5 cursor-pointer w-full"
-      >
-        Reset Filter
-      </Button>
-    </div>
+    </aside>
   );
 };
 

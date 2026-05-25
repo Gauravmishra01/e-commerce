@@ -124,7 +124,8 @@ const App = () => {
         if (res.data?.success && res.data?.user) {
           dispatch(setUser(res.data.user));
         }
-      } catch (_) {
+      } catch (error) {
+        console.error(error);
         localStorage.removeItem("accessToken");
         dispatch(setUser(null));
       }

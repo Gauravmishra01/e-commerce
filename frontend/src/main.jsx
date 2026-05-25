@@ -15,8 +15,15 @@ createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <App />
-        <Toaster />
+        <Toaster
+          position="top-right"
+          richColors
+          toastOptions={{
+            className:
+              "!rounded-2xl !border !border-slate-200 !bg-white/95 !text-slate-950 !shadow-[0_18px_60px_rgba(15,23,42,0.12)]",
+          }}
+        />
       </PersistGate>
     </Provider>
-  </StrictMode>
+  </StrictMode>,
 );
