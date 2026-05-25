@@ -16,15 +16,25 @@ import adminRoute from "./routes/adminRoute.js";
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-const allowedOrigins = (process.env.CLIENT_URLS || "http://localhost:5173")
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+const allowedOrigins = [
+  ...(process.env.CLIENT_URLS || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+  process.env.CLIENT_URL?.trim(),
+  process.env.FRONTEND_URL?.trim(),
+  process.env.NODE_ENV === "production" ? null : "http://localhost:5173",
+].filter(Boolean);
+
+const uniqueAllowedOrigins = [...new Set(allowedOrigins)];
 const allowVercelPreviews = process.env.ALLOW_VERCEL_PREVIEWS === "true";
 
 const isAllowedOrigin = (origin) => {
   if (!origin) return true;
-  if (allowedOrigins.includes("*") || allowedOrigins.includes(origin)) {
+  if (
+    uniqueAllowedOrigins.includes("*") ||
+    uniqueAllowedOrigins.includes(origin)
+  ) {
     return true;
   }
 
@@ -112,7 +122,7 @@ const startServer = async () => {
   await connectDB();
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-    console.log("Allowed origins:", allowedOrigins);
+    console.log("Allowed origins:", uniqueAllowedOrigins);
     console.log("Allow Vercel previews:", allowVercelPreviews);
   });
 };

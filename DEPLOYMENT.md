@@ -33,6 +33,7 @@ Set these environment variables in Render:
 Set these environment variables in Vercel:
 
 - `VITE_API_BASE_URL=https://<your-render-backend>.onrender.com/api/v1`
+- `VITE_API_URL=https://<your-render-backend>.onrender.com` (optional legacy key, also supported)
 
 If local development is needed:
 
@@ -56,3 +57,16 @@ If local development is needed:
 - Profile image upload failing due to multer memory storage
 - Missing customer checkout/order APIs
 - SPA route refresh 404 on Vercel
+
+## 5) Troubleshooting: 405 on /api/v1/user/login from Vercel domain
+
+If Network tab shows requests like:
+
+- `https://<your-vercel-domain>/api/v1/user/login` with `405 Method Not Allowed`
+
+Then frontend is calling itself instead of Render. Fix by:
+
+1. Set `VITE_API_BASE_URL` in Vercel to your Render API base.
+2. Redeploy frontend after changing env vars.
+3. Ensure Render CORS has your Vercel domain in `CLIENT_URLS`.
+4. Verify backend health at `https://<your-render-backend>.onrender.com/health`.
