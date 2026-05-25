@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: ekart-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm run start
+    healthCheckPath: /health
+    autoDeploy: true

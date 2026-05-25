@@ -10,6 +10,8 @@ const Cart = () => {
   const [cart, setCartState] = useState(null);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState("");
+  const [shippingAddress, setShippingAddress] = useState("");
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
   const dispatch = useDispatch();
 
   const fetchCart = async () => {
@@ -58,6 +60,26 @@ const Cart = () => {
       toast.error(error.response?.data?.message || "Unable to remove item");
     } finally {
       setBusyId("");
+    }
+  };
+
+  const handleCheckout = async () => {
+    try {
+      setCheckoutLoading(true);
+      const res = await api.post("/order/checkout", {
+        shippingAddress,
+      });
+
+      if (res.data?.success) {
+        setCartState({ items: [], totalPrice: 0 });
+        dispatch(setCart({ items: [], totalPrice: 0 }));
+        setShippingAddress("");
+        toast.success("Order placed successfully");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Checkout failed");
+    } finally {
+      setCheckoutLoading(false);
     }
   };
 
@@ -179,6 +201,39 @@ const Cart = () => {
                 </div>
               </div>
             ))}
+
+            <div className="rounded-3xl border border-white/70 bg-white/90 p-5 shadow-[0_20px_50px_rgba(15,23,42,0.06)] backdrop-blur">
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Shipping address (optional)
+              </label>
+              <textarea
+                value={shippingAddress}
+                onChange={(event) => setShippingAddress(event.target.value)}
+                placeholder="House no, street, city, zip code"
+                className="min-h-24 w-full rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-slate-900"
+              />
+
+              <div className="mt-4 flex items-center justify-between gap-4">
+                <p className="text-sm text-slate-500">
+                  Shipping is free above ₹1,000. Otherwise ₹50 applies.
+                </p>
+                <Button
+                  type="button"
+                  onClick={handleCheckout}
+                  disabled={checkoutLoading || items.length === 0}
+                  className="bg-slate-950 text-white hover:bg-slate-800"
+                >
+                  {checkoutLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    "Place Order"
+                  )}
+                </Button>
+              </div>
+            </div>
           </div>
         )}
       </div>

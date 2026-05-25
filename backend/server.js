@@ -20,6 +20,20 @@ const allowedOrigins = (process.env.CLIENT_URLS || "http://localhost:5173")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
+const allowVercelPreviews = process.env.ALLOW_VERCEL_PREVIEWS === "true";
+
+const isAllowedOrigin = (origin) => {
+  if (!origin) return true;
+  if (allowedOrigins.includes("*") || allowedOrigins.includes(origin)) {
+    return true;
+  }
+
+  if (allowVercelPreviews && origin.endsWith(".vercel.app")) {
+    return true;
+  }
+
+  return false;
+};
 
 // middleware
 app.use(express.json());
@@ -27,18 +41,28 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (isAllowedOrigin(origin)) {
         return callback(null, true);
       }
 
       return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 
 app.get("/health", (_, res) => {
   res.status(200).json({ success: true, message: "API is healthy" });
+});
+
+app.get("/", (_, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Ekart API is running",
+    docs: "/health",
+  });
 });
 
 // Post http://localhost:8000/api/v1/user/register
@@ -54,6 +78,13 @@ app.use("/api/v1/media", mediaRoute);
 app.use("/api/v1/admin", adminRoute);
 
 app.use((error, _, res, next) => {
+  if (error?.message === "Not allowed by CORS") {
+    return res.status(403).json({
+      success: false,
+      message: error.message,
+    });
+  }
+
   if (error?.name === "MulterError") {
     const message =
       error.code === "LIMIT_UNEXPECTED_FILE"
@@ -81,6 +112,8 @@ const startServer = async () => {
   await connectDB();
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log("Allowed origins:", allowedOrigins);
+    console.log("Allow Vercel previews:", allowVercelPreviews);
   });
 };
 

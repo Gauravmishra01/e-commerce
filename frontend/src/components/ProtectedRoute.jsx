@@ -4,8 +4,9 @@ import { useSelector } from "react-redux";
 
 const ProtectedRoute = ({ allowedRoles = [], redirectTo = "/login" }) => {
   const { user } = useSelector((store) => store.user);
+  const token = localStorage.getItem("accessToken");
 
-  if (!user) {
+  if (!user || !token) {
     return <Navigate to={redirectTo} replace />;
   }
 

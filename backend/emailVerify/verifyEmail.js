@@ -2,6 +2,12 @@ import nodemailer from "nodemailer";
 import "dotenv/config";
 
 export const verifyEmail = async (token, email) => {
+  const frontendBaseUrl =
+    process.env.FRONTEND_URL ||
+    process.env.CLIENT_URL ||
+    "http://localhost:5173";
+  const verifyUrl = `${frontendBaseUrl.replace(/\/$/, "")}/verify/${token}`;
+
   if (!process.env.MAIL_USER || !process.env.MAIL_PASS) {
     console.warn(
       "Email verification skipped because MAIL_USER/MAIL_PASS are not configured.",
@@ -27,7 +33,7 @@ export const verifyEmail = async (token, email) => {
     text: `Hi! There, You have recently visited 
            our website and entered your email.
            Please follow the given link to verify your email
-           http://localhost:5173/verify/${token} 
+          ${verifyUrl}
            Thanks`,
   };
   const info = await transporter.sendMail(mailConfigurations);

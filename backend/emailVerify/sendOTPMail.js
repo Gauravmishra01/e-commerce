@@ -8,6 +8,13 @@ export const SendOTPMail = async (otp, email) => {
       return { success: false, error: "Recipient email is missing" };
     }
 
+    if (!process.env.MAIL_USER || !process.env.MAIL_PASS) {
+      console.warn(
+        "OTP email skipped because MAIL_USER/MAIL_PASS are not configured.",
+      );
+      return { success: false, skipped: true };
+    }
+
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {

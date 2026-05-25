@@ -1,5 +1,6 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./components/ui/Navbar";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
@@ -13,6 +14,8 @@ import Cart from "./pages/Cart";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import AdminLogin from "./pages/AdminLogin";
 import ProtectedRoute from "./components/ProtectedRoute";
+import api from "./lib/api";
+import { setUser } from "./redux/userSlice";
 
 const router = createBrowserRouter([
   {
@@ -108,6 +111,28 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((store) => store.user);
+
+  React.useEffect(() => {
+    const restoreSession = async () => {
+      const token = localStorage.getItem("accessToken");
+      if (!token || user) return;
+
+      try {
+        const res = await api.get("/user/me");
+        if (res.data?.success && res.data?.user) {
+          dispatch(setUser(res.data.user));
+        }
+      } catch (_) {
+        localStorage.removeItem("accessToken");
+        dispatch(setUser(null));
+      }
+    };
+
+    restoreSession();
+  }, [dispatch, user]);
+
   return (
     <>
       <RouterProvider router={router} />
