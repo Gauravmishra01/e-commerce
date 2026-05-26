@@ -1,0 +1,25 @@
+<svg width="420" height="120" viewBox="0 0 420 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ekartGradient" x1="18" y1="18" x2="102" y2="102" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F59E0B" />
+      <stop offset="0.52" stop-color="#F97316" />
+      <stop offset="1" stop-color="#111827" />
+    </linearGradient>
+    <linearGradient id="ekartAccent" x1="22" y1="18" x2="98" y2="102" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFF7ED" />
+      <stop offset="1" stop-color="#FED7AA" />
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="416" height="116" rx="30" fill="#FFFFFF"/>
+  <rect x="2" y="2" width="416" height="116" rx="30" stroke="#E2E8F0" stroke-width="4"/>
+  <g transform="translate(18 18)">
+    <rect width="84" height="84" rx="24" fill="url(#ekartGradient)"/>
+    <path d="M31 56.5H54.5C56.9853 56.5 59 54.4853 59 52C59 49.5147 56.9853 47.5 54.5 47.5H37.5L44.2 34.7C45.3228 32.5366 44.4837 29.8753 42.3203 28.7525C40.1569 27.6298 37.4956 28.4688 36.3728 30.6322L25.2 52.0678C24.7754 52.8731 24.5 53.8242 24.5 54.75C24.5 57.4264 26.5736 59.5 29.25 59.5H54.5C56.9853 59.5 59 61.5147 59 64C59 66.4853 56.9853 68.5 54.5 68.5H31C27.134 68.5 24 65.366 24 61.5C24 59.0852 24.6713 57.0479 25.7 55.5C26.9246 57.1612 28.7909 58 31 58Z" fill="url(#ekartAccent)"/>
+    <circle cx="64" cy="24" r="7" fill="#FFF7ED"/>
+    <path d="M63.5 28.5L65.35 32.35L69.5 33L66.5 36L67.2 40.15L63.5 38.25L59.8 40.15L60.5 36L57.5 33L61.65 32.35L63.5 28.5Z" fill="#FFF7ED" opacity="0.9"/>
+  </g>
+  <g transform="translate(122 35)">
+    <text x="0" y="0" fill="#0F172A" font-family="Manrope, Segoe UI, Arial, sans-serif" font-size="34" font-weight="800" letter-spacing="1.2">EKART</text>
+    <text x="1" y="30" fill="#475569" font-family="Manrope, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" letter-spacing="5">PREMIUM E-COMMERCE</text>
+  </g>
+</svg>

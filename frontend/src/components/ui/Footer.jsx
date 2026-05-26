@@ -15,7 +15,11 @@ const Footer = () => {
         <div className="grid gap-10 md:grid-cols-4">
           <div>
             <Link to="/">
-              <img src="/Ekart.png" alt="Logo" className="w-32" />
+              <img
+                src="/ekart-logo.svg"
+                alt="Ekart premium e-commerce logo"
+                className="w-40 max-w-full"
+              />
             </Link>
 
             <p className="mt-3 text-sm leading-6 text-slate-400">

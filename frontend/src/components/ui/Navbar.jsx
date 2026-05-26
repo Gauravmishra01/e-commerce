@@ -72,10 +72,11 @@ const Navbar = () => {
       <div className="mx-auto max-w-7xl px-4 lg:px-0">
         <div className="flex h-20 items-center justify-between gap-4">
           <Link to="/" className="flex items-center gap-3">
-            <img src="/Ekart.png" alt="Ekart" className="w-[100px]" />
-            <span className="hidden rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-500 md:inline">
-              Premium commerce
-            </span>
+            <img
+              src="/ekart-logo.svg"
+              alt="Ekart premium e-commerce logo"
+              className="h-12 w-auto drop-shadow-sm md:h-14"
+            />
           </Link>
 
           <form
